@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+
+  pg:
+    image: postgres:16.0
+    ports:
+      - 5432:5432
+    env_file:
+      - ci.env
+    entrypoint: >
+      bash -c "
+        export POSTGRES_USER=$$DB_USER
+        export POSTGRES_PASSWORD=$$DB_PASS
+        export POSTGRES_DB=$$DB_NAME
+        docker-entrypoint.sh postgres
+      "
+
+  pg-migrate:
+    build:
+      context: .
+      dockerfile: ci.dockerfile
+    links:
+      - pg
+    depends_on:
+      - pg
+    env_file:
+      - ci.env
+    command:
+      bash -c "
+      trap 'echo INTERRUPTED; exit 1' INT TERM;
+      while !</dev/tcp/$$DB_HOST/$$DB_PORT; do echo pg-migrate-wait && sleep 1; done;
+      echo pg-migrate
+      && java -jar ./db/liquibase.jar --logLevel=debug --classpath=./db/postgresql-42.2.5.jar --driver=org.postgresql.Driver --changeLogFile=./db/changelog-kalah-game.xml --url=jdbc:postgresql://$$DB_HOST:$$DB_PORT/$$DB_NAME --username=$$DB_USER --password=$$DB_PASS update
+      "
