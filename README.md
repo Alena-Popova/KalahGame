@@ -7,8 +7,13 @@
 * Junit 5
 
 ## Setup
+### Raise a docker environment
 ```
 docker-compose -f ./dev.docker-compose.yml up --build
+```
+### To stop and remove containers
+```
+docker stop $(docker ps -q) && docker rm $(docker ps -a -q)
 ```
 
 ## Game description
