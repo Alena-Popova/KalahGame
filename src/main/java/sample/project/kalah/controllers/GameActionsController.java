@@ -14,36 +14,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sample.project.kalah.dto.GameDTO;
-import sample.project.kalah.services.interfaces.GameProcessorService;
+import sample.project.kalah.services.interfaces.GameActionService;
 
 @RestController
 @RequestMapping("/api/game")
 public class GameActionsController
 {
     @Autowired
-    private GameProcessorService gameProcessorService;
+    private GameActionService gameActionService;
 
     @GetMapping("/{id}")
     public ResponseEntity<GameDTO> getGame(@PathVariable("id") UUID gameId)
     {
-        return new ResponseEntity<>(gameProcessorService.getGame(gameId), HttpStatus.OK);
+        return new ResponseEntity<>(gameActionService.getGame(gameId), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<GameDTO> createGame()
     {
-        return new ResponseEntity<>(gameProcessorService.createGame(), HttpStatus.CREATED);
+        return new ResponseEntity<>(gameActionService.createGame(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/join")
     public ResponseEntity<GameDTO> joinGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
     {
-        return new ResponseEntity<>(gameProcessorService.joinGame(gameId, player), HttpStatus.OK);
+        return new ResponseEntity<>(gameActionService.joinGame(gameId, player), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/finish")
     public ResponseEntity<GameDTO> finishGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
     {
-        return new ResponseEntity<>(gameProcessorService.finishGame(gameId, player), HttpStatus.OK);
+        return new ResponseEntity<>(gameActionService.finishGame(gameId, player), HttpStatus.OK);
     }
 }

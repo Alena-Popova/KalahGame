@@ -5,13 +5,14 @@ import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.sql.Types;
+import java.util.Arrays;
+
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
-public class IntegerArrayType implements UserType
+public class StringArrayType implements UserType
 {
     private static final int[] SQL_TYPES = new int[]{Types.ARRAY};
 
@@ -22,9 +23,9 @@ public class IntegerArrayType implements UserType
     }
 
     @Override
-    public Class<Integer[]> returnedClass()
+    public Class<String[]> returnedClass()
     {
-        return Integer[].class;
+        return String[].class;
     }
 
     @Override
@@ -34,33 +35,19 @@ public class IntegerArrayType implements UserType
             return true;
         else if (o1 == null || o2 == null)
             return false;
-        if (o1 instanceof int[] && o2 instanceof int[])
-        {
-            return Arrays.equals(((int[]) o1), ((int[]) o2));
-        }
-        else
-        {
-            return Arrays.equals((Integer[]) o1, (Integer[]) o2);
-        }
+        return Arrays.equals((String[]) o1, (String[]) o2);
     }
 
     @Override
     public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor sessionImplementor, Object owner) throws HibernateException, SQLException
     {
-
-        if (names.length != 1)
-            throw new IllegalArgumentException("names.length != 1, names = " + names);
-
-        Array value = resultSet.getArray(names[0]);
-
-        if (value == null)
+        Array rsArray = resultSet.getArray(names[0]);
+        if (rsArray == null)
         {
             return null;
         }
-        else
-        {
-            return value.getArray();
-        }
+        String[] array = (String[]) rsArray.getArray();
+        return array;
     }
 
     @Override
@@ -68,23 +55,13 @@ public class IntegerArrayType implements UserType
     {
         if (value == null)
         {
-            preparedStatement.setNull(i, java.sql.Types.ARRAY);
-        }
-        else if (value instanceof Integer[])
-        {
-            Integer[] myArray = (Integer[]) value;
-            Array inArray = preparedStatement.getConnection().createArrayOf("integer", myArray);
-            preparedStatement.setArray(i, inArray);
-        }
-        else if (value instanceof int[])
-        {
-            int[] myArray = (int[]) value;
-            Array inArray = preparedStatement.getConnection().createArrayOf("integer", wrap(myArray));
-            preparedStatement.setArray(i, inArray);
+            preparedStatement.setNull(i, SQL_TYPES[0]);
         }
         else
         {
-            throw new IllegalArgumentException("Invalid type of input: " + value.getClass().getName());
+            String[] castObject = (String[]) value;
+            Array array = sessionImplementor.connection().createArrayOf("text", castObject);
+            preparedStatement.setArray(i, array);
         }
     }
 
@@ -95,14 +72,9 @@ public class IntegerArrayType implements UserType
         {
             return null;
         }
-        else if (o instanceof Integer[])
+        else if (o instanceof String[])
         {
-            Integer[] array = (Integer[]) o;
-            return array.clone();
-        }
-        else if (o instanceof int[])
-        {
-            int[] array = (int[]) o;
+            String[] array = (String[]) o;
             return array.clone();
         }
         else
@@ -140,15 +112,4 @@ public class IntegerArrayType implements UserType
     {
         return original;
     }
-
-    private static Object[] wrap(int[] intArray)
-    {
-        Integer[] result = new Integer[intArray.length];
-        for (int i = 0; i < intArray.length; i++)
-        {
-            result[i] = Integer.valueOf(intArray[i]);
-        }
-        return result;
-    }
 }
-

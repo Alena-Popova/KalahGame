@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"/>
+    <title>Error</title>
+</head>
+<body>
+<div class="error_page_container">
+    <h1>Error Page</h1>
+    <div>
+        Sorry something is going wrong: <span style="color: red;" th:text="${message}"></span>
+    </div>
+</div>
+</body>
+</html>

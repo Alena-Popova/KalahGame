@@ -1,45 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
 <head>
     <meta charset="UTF-8">
     <title>Kalah Game</title>
-    <style>
-        .info-box {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .circle {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            line-height: 10px;
-            display: inline-block;
-            margin: 0 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<!-- Раска с текстом -->
-<div class="info-box">
-    If you want to invite a friend, use this link:
-</div>
-
-<!-- Круги с цифрой 6 -->
-<div style="text-align: center;">
-    <div class="circle">6</div>
-    <div class="circle">6</div>
-    <div class="circle">6</div>
-    <div class="circle">6</div>
-    <div class="circle">6</div>
-    <div class="circle">6</div>
+<div class="play_container">
+    <th:block layout:insert="~{fragments/finish_button}"/>
+    <div th:if="${status == 'FINISHED'}" class="status_message_container">
+        <span th:if="${victorious_player == 'FIRST_PLAYER'}">
+            Congratulations, game over! Winner first player
+        </span>
+            <span th:if="${victorious_player == 'SECOND_PLAYER'}">
+            Congratulations, game over! Winner second player
+        </span>
+            <span th:if="${victorious_player == null}">
+            Game ended!
+        </span>
+    </div>
+    <div th:if="${status != 'FINISHED'}">
+        <div class="join_link_container">
+            If you want to invite a friend, use this link: <span th:text="${link}"></span>
+        </div>
+        <div class="game_bar_container">
+            <div class="first_player_kalah_container">
+                <div class="circle">K 1</div>
+            </div>
+            <div class="stones_bar_container">
+                <div class="first_player_stones_bar_container">
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                </div>
+                <div class="second_player_stones_bar_container">
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                    <div class="circle">6</div>
+                </div>
+            </div>
+            <div class="second_player_kalah_container">
+                <div class="circle">K 2</div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

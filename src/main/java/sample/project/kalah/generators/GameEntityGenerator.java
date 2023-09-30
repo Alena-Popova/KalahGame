@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.generators.interfaces.EntityGenerator;
 
@@ -28,11 +29,13 @@ public class GameEntityGenerator implements EntityGenerator<GameEntity>
         Arrays.fill(firstPlayerStones, numberOfStones);
         Arrays.fill(secondPlayerStones, numberOfStones);
 
-        return GameEntity.builder().id(id)
-                .firstPlayerStones(firstPlayerStones)
-                .secondPlayerStones(secondPlayerStones)
-                .firstPlayerKalah(0)
-                .secondPlayerKalah(0)
-                .build();
+        GameEntity gameEntity = new GameEntity();
+        gameEntity.setId(id);
+        gameEntity.setStatus(GameStatus.INIT);
+        gameEntity.setFirstPlayerStones(firstPlayerStones);
+        gameEntity.setFirstPlayerKalah(0);
+        gameEntity.setSecondPlayerStones(secondPlayerStones);
+        gameEntity.setSecondPlayerKalah(0);
+        return gameEntity;
     }
 }
