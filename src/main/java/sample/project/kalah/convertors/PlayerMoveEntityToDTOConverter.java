@@ -1,27 +1,31 @@
 package sample.project.kalah.convertors;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import sample.project.kalah.convertors.interfaces.Converter;
-import sample.project.kalah.dto.PlayerMoveDTO;
+import sample.project.kalah.dto.PlayerMoveResponse;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 
 @Component("playerMoveEntityToDTOConverter")
-public class PlayerMoveEntityToDTOConverter implements Converter<PlayerMoveEntity, PlayerMoveDTO>
+public class PlayerMoveEntityToDTOConverter implements Converter<PlayerMoveEntity, PlayerMoveResponse>
 {
     @Override
-    public PlayerMoveDTO convert(final PlayerMoveEntity source)
+    public PlayerMoveResponse convert(final PlayerMoveEntity source)
     {
-        return PlayerMoveDTO.builder()
+        final UUID gameId = source.getGame() != null ? source.getGame().getId() : null;
+
+        return PlayerMoveResponse.builder()
                 .id(source.getId())
-                .gameId(source.getGame() != null ? source.getGame().getId() : null)
+                .gameId(gameId)
                 .moveNumber(source.getMoveNumber())
                 .player(source.getPlayer())
                 .startingPit(source.getStartingPit())
-                .startsInKalah(source.isStartsInKalah())
+                .startsInPlayerKalah(source.isStartsInPlayerKalah())
                 .isPlayerSide(source.isPlayerSide())
                 .endingPit(source.getEndingPit())
-                .endsInKalah(source.isEndsInKalah())
+                .endsInPlayerKalah(source.isEndsInPlayerKalah())
                 .build();
     }
 }

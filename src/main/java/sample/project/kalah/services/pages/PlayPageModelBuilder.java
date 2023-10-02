@@ -1,38 +1,33 @@
-package sample.project.kalah.services;
+package sample.project.kalah.services.pages;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import sample.project.kalah.dto.GameDTO;
+import sample.project.kalah.dto.GameConditionResponse;
+import sample.project.kalah.services.GameConfigurationService;
 import sample.project.kalah.services.interfaces.GameActionService;
 
 @Service("playPageModelBuilder")
 public class PlayPageModelBuilder
 {
-    @Value("${server.scheme}")
-    private String scheme;
-
-    @Value("${server.host}")
-    private String host;
-
-    @Value("${server.port}")
-    private String port;
-
-    @Value("${server.startPageName}")
-    private String startPageName;
+    private final GameActionService gameActionService;
+    private final GameConfigurationService gameConfigurationService;
 
     @Autowired
-    private GameActionService gameActionService;
+    public PlayPageModelBuilder(final GameActionService gameActionService, final GameConfigurationService gameConfigurationService)
+    {
+        this.gameActionService = gameActionService;
+        this.gameConfigurationService = gameConfigurationService;
+    }
 
-    public void fillPlayModel(final String gameId, Model model)
+    public void fillPlayModel(final UUID gameId, Model model)
     {
         try
         {
-            GameDTO gameDTO = gameActionService.getGame(UUID.fromString(gameId));
+            GameConditionResponse gameDTO = gameActionService.getGame(gameId);
             model.addAttribute("game_id", gameId);
             model.addAttribute("link", generateJoinLink(gameId));
 
@@ -55,8 +50,8 @@ public class PlayPageModelBuilder
         }
     }
 
-    private String generateJoinLink(final String id)
+    private String generateJoinLink(final UUID id)
     {
-        return String.format("%s://%s:%s/%s/%s", scheme, host, port, id, startPageName);
+        return String.format("%s://%s:%s/%s/%s", gameConfigurationService.getServerScheme(), gameConfigurationService.getServerHost(), gameConfigurationService.getServerPort(), id, gameConfigurationService.getPlayWebPageValue());
     }
 }

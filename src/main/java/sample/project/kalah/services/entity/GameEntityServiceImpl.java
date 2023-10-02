@@ -13,8 +13,13 @@ import sample.project.kalah.services.entity.interfaces.GameEntityService;
 @Service("gameEntityService")
 public class GameEntityServiceImpl implements GameEntityService
 {
+    private final GameEntityRepository gameEntityRepository;
+
     @Autowired
-    private GameEntityRepository gameEntityRepository;
+    public GameEntityServiceImpl(final GameEntityRepository gameEntityRepository)
+    {
+        this.gameEntityRepository = gameEntityRepository;
+    }
 
     @Override
     public GameEntity getGame(final UUID gameId) throws GameNotFoundException

@@ -5,7 +5,7 @@ package sample.project.kalah.generators.interfaces;
  *
  * @param <T> The type of entity to be generated.
  */
-public interface EntityGenerator<T>
+public interface DefaultEntityGenerator<T>
 {
-    T generateDefaultEntity();
+    T generate();
 }

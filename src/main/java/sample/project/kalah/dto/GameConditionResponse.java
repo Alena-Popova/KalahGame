@@ -11,13 +11,10 @@ import lombok.Data;
 import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.Player;
 
-/**
- * Data Transfer Object (DTO) representing a game.
- */
 @Data
 @Builder
-@JsonDeserialize(builder = GameDTO.GameDTOBuilder.class)
-public class GameDTO
+@JsonDeserialize(builder = GameConditionResponse.GameConditionResponseBuilder.class)
+public class GameConditionResponse
 {
 
     @JsonProperty
@@ -42,7 +39,7 @@ public class GameDTO
     private List<Player> activePlayers;
 
     @JsonProperty("moves")
-    private List<PlayerMoveDTO> moves;
+    private List<PlayerMoveResponse> moves;
 
     @JsonProperty("victorious_player")
     private Player victoriousPlayer;

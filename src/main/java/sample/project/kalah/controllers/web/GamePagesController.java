@@ -1,43 +1,55 @@
 package sample.project.kalah.controllers.web;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import sample.project.kalah.services.PlayPageModelBuilder;
+import sample.project.kalah.services.GameConfigurationService;
+import sample.project.kalah.services.pages.PlayPageModelBuilder;
 
 @Controller
 public class GamePagesController
 {
-    @Value("${server.playPageName}")
-    private String playPageName;
+    private final PlayPageModelBuilder playPageModelBuilder;
 
-    @Value("${server.startPageName}")
-    private String startPageName;
+    private final GameConfigurationService gameConfigurationService;
 
     @Autowired
-    private PlayPageModelBuilder playPageModelBuilder;
+    public GamePagesController(final PlayPageModelBuilder playPageModelBuilder, final GameConfigurationService gameConfigurationService)
+    {
+        this.playPageModelBuilder = playPageModelBuilder;
+        this.gameConfigurationService = gameConfigurationService;
+    }
+
 
     @GetMapping(value = {"/", "/start"})
     public String startGame()
     {
-        return startPageName;
+        try
+        {
+            return gameConfigurationService.getStartWebPageValue();
+        }
+        catch (Exception e)
+        {
+            return gameConfigurationService.getErrorWebPageValue();
+        }
     }
 
     @GetMapping("/{id}/play")
-    public String playGame(@PathVariable("id") String gameId, Model model)
+    public String playGame(@PathVariable("id") UUID gameId, Model model)
     {
         try
         {
             playPageModelBuilder.fillPlayModel(gameId, model);
-            return playPageName;
+            return gameConfigurationService.getPlayWebPageValue();
         }
         catch (Exception e)
         {
-            return "error";
+            return gameConfigurationService.getErrorWebPageValue();
         }
     }
 }

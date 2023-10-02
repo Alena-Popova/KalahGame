@@ -13,37 +13,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sample.project.kalah.dto.GameDTO;
+import sample.project.kalah.dto.GameConditionResponse;
 import sample.project.kalah.services.interfaces.GameActionService;
 
 @RestController
 @RequestMapping("/api/game")
 public class GameActionsController
 {
+    private final GameActionService gameActionService;
+
     @Autowired
-    private GameActionService gameActionService;
+    public GameActionsController(final GameActionService gameActionService)
+    {
+        this.gameActionService = gameActionService;
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GameDTO> getGame(@PathVariable("id") UUID gameId)
+    public ResponseEntity<GameConditionResponse> getGame(@PathVariable("id") UUID gameId)
     {
         return new ResponseEntity<>(gameActionService.getGame(gameId), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GameDTO> createGame()
+    public ResponseEntity<GameConditionResponse> createGame()
     {
         return new ResponseEntity<>(gameActionService.createGame(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/join")
-    public ResponseEntity<GameDTO> joinGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
+    public ResponseEntity<GameConditionResponse> joinGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
     {
         return new ResponseEntity<>(gameActionService.joinGame(gameId, player), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/finish")
-    public ResponseEntity<GameDTO> finishGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
+    public ResponseEntity<GameConditionResponse> finishGame(@PathVariable("id") UUID gameId)
     {
-        return new ResponseEntity<>(gameActionService.finishGame(gameId, player), HttpStatus.OK);
+        return new ResponseEntity<>(gameActionService.finishGame(gameId), HttpStatus.OK);
     }
 }

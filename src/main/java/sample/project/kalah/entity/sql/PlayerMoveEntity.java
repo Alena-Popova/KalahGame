@@ -44,8 +44,8 @@ public class PlayerMoveEntity
     @Column(name = "starting_pit")
     private Integer startingPit;
 
-    @Column(name = "starts_in_kalah")
-    private boolean startsInKalah;
+    @Column(name = "starts_in_player_kalah")
+    private boolean startsInPlayerKalah;
 
     @Column(name = "is_player_side")
     private boolean isPlayerSide;
@@ -53,8 +53,8 @@ public class PlayerMoveEntity
     @Column(name = "ending_pit")
     private Integer endingPit;
 
-    @Column(name = "ends_in_kalah")
-    private boolean endsInKalah;
+    @Column(name = "ends_in_player_kalah")
+    private boolean endsInPlayerKalah;
 
     @Override
     public boolean equals(final Object o)
@@ -80,10 +80,10 @@ public class PlayerMoveEntity
                 ", moveNumber=" + moveNumber +
                 ", player=" + player +
                 ", startingPit=" + startingPit +
-                ", startsInKalah=" + startsInKalah +
+                ", startsInPlayerKalah=" + startsInPlayerKalah +
                 ", isPlayerSide=" + isPlayerSide +
                 ", endingPit=" + endingPit +
-                ", endsInKalah=" + endsInKalah +
+                ", endsInPlayerKalah=" + endsInPlayerKalah +
                 '}';
     }
 }

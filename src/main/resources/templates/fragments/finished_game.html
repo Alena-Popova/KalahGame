@@ -1,0 +1,11 @@
+<div th:if="${status == 'FINISHED'}" class="status_message_container" xmlns:th="http://www.w3.org/1999/xhtml">
+        <span th:if="${victorious_player == 'FIRST_PLAYER'}">
+            Congratulations, game over! Winner first player
+        </span>
+    <span th:if="${victorious_player == 'SECOND_PLAYER'}">
+            Congratulations, game over! Winner second player
+        </span>
+    <span th:if="${victorious_player == null}">
+            Game ended!
+        </span>
+</div>

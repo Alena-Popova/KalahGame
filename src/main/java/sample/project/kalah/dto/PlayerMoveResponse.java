@@ -9,13 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import sample.project.kalah.entity.Player;
 
-/**
- * Data Transfer Object (DTO) representing a player move.
- */
 @Data
 @Builder
-@JsonDeserialize(builder = PlayerMoveDTO.PlayerMoveDTOBuilder.class)
-public class PlayerMoveDTO
+@JsonDeserialize(builder = PlayerMoveResponse.PlayerMoveResponseBuilder.class)
+public class PlayerMoveResponse
 {
 
     @JsonProperty("id")
@@ -33,8 +30,8 @@ public class PlayerMoveDTO
     @JsonProperty("starting_pit")
     private Integer startingPit;
 
-    @JsonProperty("starts_in_kalah")
-    private boolean startsInKalah;
+    @JsonProperty("starts_in_player_kalah")
+    private boolean startsInPlayerKalah;
 
     @JsonProperty("is_player_side")
     private boolean isPlayerSide;
@@ -42,6 +39,6 @@ public class PlayerMoveDTO
     @JsonProperty("ending_pit")
     private Integer endingPit;
 
-    @JsonProperty("ends_in_kalah")
-    private boolean endsInKalah;
+    @JsonProperty("ends_in_player_kalah")
+    private boolean endsInPlayerKalah;
 }

@@ -15,17 +15,18 @@
     margin-bottom: 20px;
 }
 
-.panel {
+.start_page_container {
     border: 1px solid #000;
     border-radius: 12px;
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .section {
+    margin-top: 20px;
     margin-right: 20px;
 }
 
@@ -39,7 +40,7 @@
     margin-right: 10px;
 }
 
-.section button {
+button {
     background-color: #3498db;
     border: none;
     color: white;
@@ -50,9 +51,10 @@
     font-size: 16px;
     border-radius: 12px;
     cursor: pointer;
+    width: 200px;
 }
 
-.section button:hover {
+button:hover {
     background-color: #2980b9;
 }
 
@@ -95,8 +97,8 @@
 .circle {
     margin-right: 10px;
 
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border: 1px solid #3498db;
     border-radius: 50%;
     background-color: #FFFFFF;
@@ -119,4 +121,27 @@
     align-items: center;
     text-align: center;
     padding: 20px;
+}
+
+.block_center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.game_bar_container div {
+    padding: 10px;
+    margin: 10px;
+}
+
+.kalah_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.kalah_container span {
+     padding: 3px;
+     margin: 3px;
 }

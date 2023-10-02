@@ -9,22 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import sample.project.kalah.convertors.interfaces.Converter;
-import sample.project.kalah.dto.GameDTO;
-import sample.project.kalah.dto.PlayerMoveDTO;
+import sample.project.kalah.dto.GameConditionResponse;
+import sample.project.kalah.dto.PlayerMoveResponse;
 import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 
 @Component("gameEntityToDTOConverter")
-public class GameEntityToDTOConverter implements Converter<GameEntity, GameDTO>
+public class GameEntityToDTOConverter implements Converter<GameEntity, GameConditionResponse>
 {
+    private final Converter<PlayerMoveEntity, PlayerMoveResponse> playerMoveEntityToDTOConverter;
+
     @Autowired
-    private Converter<PlayerMoveEntity, PlayerMoveDTO> playerMoveEntityToDTOConverter;
+    public GameEntityToDTOConverter(final Converter<PlayerMoveEntity, PlayerMoveResponse> playerMoveEntityToDTOConverter)
+    {
+        this.playerMoveEntityToDTOConverter = playerMoveEntityToDTOConverter;
+    }
 
     @Override
-    public GameDTO convert(final GameEntity source)
+    public GameConditionResponse convert(final GameEntity source)
     {
-        return GameDTO.builder()
+        return GameConditionResponse.builder()
                 .id(source.getId())
                 .status(source.getStatus())
                 .firstPlayerStones(toList(source.getFirstPlayerStones()))
@@ -37,7 +42,7 @@ public class GameEntityToDTOConverter implements Converter<GameEntity, GameDTO>
                 .build();
     }
 
-    private List<PlayerMoveDTO> convertMoves(List<PlayerMoveEntity> moves)
+    private List<PlayerMoveResponse> convertMoves(List<PlayerMoveEntity> moves)
     {
         return moves != null
                 ? moves.stream()

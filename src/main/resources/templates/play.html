@@ -10,49 +10,45 @@
 </head>
 <body>
 <div class="play_container">
-    <th:block layout:insert="~{fragments/finish_button}"/>
-    <div th:if="${status == 'FINISHED'}" class="status_message_container">
-        <span th:if="${victorious_player == 'FIRST_PLAYER'}">
-            Congratulations, game over! Winner first player
-        </span>
-            <span th:if="${victorious_player == 'SECOND_PLAYER'}">
-            Congratulations, game over! Winner second player
-        </span>
-            <span th:if="${victorious_player == null}">
-            Game ended!
-        </span>
+    <div class="title">
+        Kalah Game
     </div>
+    <th:block layout:insert="~{fragments/finished_game}"/>
     <div th:if="${status != 'FINISHED'}">
-        <div class="join_link_container">
-            If you want to invite a friend, use this link: <span th:text="${link}"></span>
-        </div>
-        <div class="game_bar_container">
-            <div class="first_player_kalah_container">
-                <div class="circle">K 1</div>
+        <!--/*@thymesVar id="game_id" type="java.lang.String"*/-->
+
+        <th:block layout:insert="~{fragments/join_link}"/>
+
+        <div class="block_center">First player side</div>
+        <div class="game_bar_container block_center">
+            <div class="first_player_kalah_container circle kalah_container">
+                <span>Kalah</span>
+                <span th:text="${first_player_kalah}"></span>
             </div>
             <div class="stones_bar_container">
                 <div class="first_player_stones_bar_container">
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
+                    <div th:each="stone : ${first_player_stones}" th:attr="data-value=${stone}" class="circle">
+                        <span th:text="${stone}"></span>
+                    </div>
                 </div>
                 <div class="second_player_stones_bar_container">
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
-                    <div class="circle">6</div>
+                    <div th:each="stone : ${second_player_stones}" th:attr="data-value=${stone}" class="circle">
+                        <span th:text="${stone}"></span>
+                    </div>
                 </div>
             </div>
-            <div class="second_player_kalah_container">
-                <div class="circle">K 2</div>
+            <div class="second_player_kalah_container circle kalah_container">
+                <span>Kalah</span>
+                <span th:text="${second_player_kalah}"></span>
             </div>
+        </div>
+        <div class="block_center">Second player side</div>
+        <div class="block_center game_bar_container">
+            <th:block layout:insert="~{fragments/generate_player}"/>
+            <th:block layout:insert="~{fragments/finish_button}"/>
         </div>
     </div>
 </div>
+<script src="/js/play_page_script.js"></script>
 </body>
 </html>

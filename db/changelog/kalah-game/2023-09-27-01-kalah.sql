@@ -18,9 +18,9 @@ CREATE TABLE player_moves (
     move_number INTEGER,
     player VARCHAR,
     starting_pit INTEGER,
-    starts_in_kalah BOOLEAN,
+    starts_in_player_kalah BOOLEAN,
     is_player_side BOOLEAN,
     ending_pit INTEGER,
-    ends_in_kalah BOOLEAN,
+    ends_in_player_kalah BOOLEAN,
     FOREIGN KEY (game_id) REFERENCES kalah_games_data(id)
 );

@@ -5,6 +5,16 @@
 * Gradle
 * Spring Boot
 * Junit 5
+* DB: PSQL
+
+The additional environment is deployed in Docker containers.
+<br>
+The database schema is presented in <em>db/changelog/kalah-game</em>
+
+### In local setup:
+Start page with the ability to generate a link to the game: <em> http://localhost:9999/start </em>
+<br>
+Page where you can join the game: <em> http://localhost:9999/{game_id}/play </em>
 
 ## Setup
 ### Raise a docker environment
@@ -21,15 +31,14 @@ docker stop $(docker ps -q) && docker rm $(docker ps -a -q)
 ### Board Setup
 Each of the two players has his six pits in front of him. To the right of the six pits,
 each player has a larger pit. At the start of the game, there are six stones in each
-of the six round pits .
-Rules
+of the six round pits.
 ### Game Play
 The player who begins with the first move picks up all the stones in any of his own
 six pits, and sows the stones on to the right, one in each of the following pits,
 including his own big pit. No stones are put in the opponents' big pit. If the player's
 last stone lands in his own big pit, he gets another turn. This can be repeated
 several times before it's the other player's turn.
-Capturing Stones
+### Capturing Stones
 During the game the pits are emptied on both sides. Always when the last stone
 lands in an own empty pit, the player captures his own stone and all stones in the
 opposite pit (the other player’s pit) and puts them in his own (big or little?) pit.
