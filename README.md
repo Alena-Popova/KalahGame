@@ -1,5 +1,7 @@
 # Kalah Game
 
+Note: the project is a little unfinished. More testing and functionality improvements are needed.
+
 ## Project characteristics
 * Java 18
 * Gradle
