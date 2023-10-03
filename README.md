@@ -25,6 +25,8 @@ docker-compose -f ./dev.docker-compose.yml up --build
 ```
 docker stop $(docker ps -q) && docker rm $(docker ps -a -q)
 ```
+![start page](https://github.com/Alena-Popova/KalahGame/blob/main/images/start_page.png)
+![play page](https://github.com/Alena-Popova/KalahGame/blob/main/images/play_page.png)
 
 ## Game description
 
