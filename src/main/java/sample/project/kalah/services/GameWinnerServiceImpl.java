@@ -1,5 +1,6 @@
 package sample.project.kalah.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class GameWinnerServiceImpl implements GameWinnerService
             return Optional.of(Player.SECOND_PLAYER);
         }
 
-        int firstPlayerSumStones = sumStones(game.getFirstPlayerStones());
-        int secondPlayerSumStones = sumStones(game.getSecondPlayerStones());
+        int firstPlayerSumStones = sumStones(game.getFirstPlayerStonesList());
+        int secondPlayerSumStones = sumStones(game.getSecondPlayerStonesList());
 
         if (firstPlayerSumStones != 0 && secondPlayerSumStones != 0)
         {
@@ -50,17 +51,11 @@ public class GameWinnerServiceImpl implements GameWinnerService
         );
     }
 
-    private int sumStones(Integer[] stones)
+    private int sumStones(List<Integer> stones)
     {
-        int sum = 0;
-        for (Integer stone : stones)
-        {
-            if (stone != null)
-            {
-                sum += stone;
-            }
-        }
-        return sum;
+        return stones.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
 }

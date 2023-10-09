@@ -13,10 +13,9 @@ import sample.project.kalah.entity.Player;
 
 @Data
 @Builder
-@JsonDeserialize(builder = GameConditionResponse.GameConditionResponseBuilder.class)
-public class GameConditionResponse
+@JsonDeserialize(builder = GameConditionData.GameConditionDataBuilder.class)
+public class GameConditionData
 {
-
     @JsonProperty
     private UUID id;
 
@@ -39,8 +38,8 @@ public class GameConditionResponse
     private List<Player> activePlayers;
 
     @JsonProperty("moves")
-    private List<PlayerMoveResponse> moves;
+    private List<PlayerMoveData> moves;
 
-    @JsonProperty("victorious_player")
-    private Player victoriousPlayer;
+    @JsonProperty("winner")
+    private Player winner;
 }

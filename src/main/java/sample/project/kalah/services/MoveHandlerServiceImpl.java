@@ -1,22 +1,23 @@
 package sample.project.kalah.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import sample.project.kalah.convertors.interfaces.Converter;
-import sample.project.kalah.dto.GameConditionResponse;
-import sample.project.kalah.dto.PlayerMoveRequest;
+import sample.project.kalah.dto.GameBarData;
+import sample.project.kalah.dto.GameConditionData;
+import sample.project.kalah.dto.PlayerMoveData;
 import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 import sample.project.kalah.exceptions.MoveNotAllowedException;
-import sample.project.kalah.generators.PlayerMoveEntityGenerator;
+import sample.project.kalah.generators.interfaces.PlayerMoveEntityGenerator;
 import sample.project.kalah.services.entity.interfaces.GameEntityService;
 import sample.project.kalah.services.interfaces.GameWinnerService;
 import sample.project.kalah.services.interfaces.MoveActionService;
@@ -31,51 +32,61 @@ public class MoveHandlerServiceImpl implements MoveActionService
 
     private final GameEntityService gameEntityService;
 
+    private final GameBarDataServiceImpl gameBarDataService;
+
     private final PlayerMoveEntityGenerator playerMoveEntityGenerator;
 
-    private final Converter<GameEntity, GameConditionResponse> gameEntityToDTOConverter;
+    private final Converter<GameEntity, GameConditionData> gameEntityToDataConverter;
 
     @Autowired
-    public MoveHandlerServiceImpl(final List<RuleChecker> rulesCheckers, final GameWinnerService gameWinnerService, final GameEntityService gameEntityService, final PlayerMoveEntityGenerator playerMoveEntityGenerator, final Converter<GameEntity, GameConditionResponse> gameEntityToDTOConverter)
+    public MoveHandlerServiceImpl(final List<RuleChecker> rulesCheckers,
+                                  final GameBarDataServiceImpl gameBarDataService,
+                                  final GameWinnerService gameWinnerService,
+                                  final GameEntityService gameEntityService,
+                                  final PlayerMoveEntityGenerator playerMoveEntityGenerator,
+                                  final Converter<GameEntity, GameConditionData> gameEntityToDataConverter)
     {
         this.rulesCheckers = rulesCheckers;
+        this.gameBarDataService = gameBarDataService;
         this.gameWinnerService = gameWinnerService;
         this.gameEntityService = gameEntityService;
         this.playerMoveEntityGenerator = playerMoveEntityGenerator;
-        this.gameEntityToDTOConverter = gameEntityToDTOConverter;
+        this.gameEntityToDataConverter = gameEntityToDataConverter;
     }
 
     @Override
-    public GameConditionResponse makeMove(final UUID gameId, final PlayerMoveRequest nextMove) throws MoveNotAllowedException
+    public GameConditionData makeMove(final UUID gameId, final PlayerMoveData nextMove) throws MoveNotAllowedException
     {
+        Assert.notNull(gameId, "gameId cannot be null");
+        Assert.notNull(nextMove, "nextMove cannot be null");
+
         GameEntity gameEntity = gameEntityService.getGame(gameId);
 
-        if (!isNextMoveAllowed(gameEntity, nextMove))
-        {
-            throw new MoveNotAllowedException("This pit is not allowed for the player's move");
-        }
+        checkNextMoveAllowed(gameEntity, nextMove);
 
         gameEntity = addNewMove(gameEntity, nextMove);
         gameEntity = updateGameStatusIfFinished(gameEntity);
 
-        return gameEntityToDTOConverter.convert(gameEntity);
+        return gameEntityToDataConverter.convert(gameEntity);
     }
 
-    private boolean isNextMoveAllowed(GameEntity gameEntity, PlayerMoveRequest nextMove)
+    private void checkNextMoveAllowed(GameEntity gameEntity, PlayerMoveData nextMove)
     {
-        return rulesCheckers.stream().anyMatch(rule -> rule.apply(gameEntity, nextMove));
+        boolean isNotAllowed = rulesCheckers.stream().noneMatch(rule -> rule.apply(gameEntity, nextMove));
+        if (isNotAllowed)
+        {
+            throw new MoveNotAllowedException("This pit is not allowed for the player's move");
+        }
     }
 
-    private GameEntity addNewMove(GameEntity game, PlayerMoveRequest nextMove)
+    private GameEntity addNewMove(GameEntity gameEntity, PlayerMoveData nextMoveData)
     {
-        PlayerMoveEntity playerMoveEntity = playerMoveEntityGenerator.generate(game, nextMove);
-
-        List<PlayerMoveEntity> moves = new ArrayList<>(game.getMoves());
-        moves.add(playerMoveEntity);
-        game.setMoves(moves);
-
-        return gameEntityService.saveAndFlush(game);
+        GameBarData oldStateGameBarData = gameBarDataService.getGameBarData(nextMoveData.getPlayer(), gameEntity);
+        GameBarData updatedStateGameBarData = gameBarDataService.updateGameBarData(nextMoveData, oldStateGameBarData);
+        PlayerMoveEntity nextPlayerMoveEntity = playerMoveEntityGenerator.generate(nextMoveData);
+        return gameEntityService.updateGameEntity(updatedStateGameBarData, nextPlayerMoveEntity, gameEntity);
     }
+
 
     private GameEntity updateGameStatusIfFinished(GameEntity gameEntity)
     {
@@ -85,7 +96,7 @@ public class MoveHandlerServiceImpl implements MoveActionService
             return gameEntity;
         }
         gameEntity.setStatus(GameStatus.FINISHED);
-        gameEntity.setVictoriousPlayer(winnerOPT.get());
+        gameEntity.setWinner(winnerOPT.get());
         return gameEntityService.saveAndFlush(gameEntity);
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sample.project.kalah.dto.GameConditionResponse;
+import sample.project.kalah.dto.GameConditionData;
 import sample.project.kalah.services.interfaces.GameActionService;
 
 @RestController
@@ -29,25 +29,25 @@ public class GameActionsController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GameConditionResponse> getGame(@PathVariable("id") UUID gameId)
+    public ResponseEntity<GameConditionData> getGame(@PathVariable("id") UUID gameId)
     {
         return new ResponseEntity<>(gameActionService.getGame(gameId), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GameConditionResponse> createGame()
+    public ResponseEntity<GameConditionData> createGame()
     {
         return new ResponseEntity<>(gameActionService.createGame(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/join")
-    public ResponseEntity<GameConditionResponse> joinGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
+    public ResponseEntity<GameConditionData> joinGame(@PathVariable("id") UUID gameId, @RequestParam("player") String player)
     {
         return new ResponseEntity<>(gameActionService.joinGame(gameId, player), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/finish")
-    public ResponseEntity<GameConditionResponse> finishGame(@PathVariable("id") UUID gameId)
+    public ResponseEntity<GameConditionData> finishGame(@PathVariable("id") UUID gameId)
     {
         return new ResponseEntity<>(gameActionService.finishGame(gameId), HttpStatus.OK);
     }

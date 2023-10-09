@@ -27,7 +27,14 @@ import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.usertype.IntegerArrayType;
 import sample.project.kalah.entity.usertype.StringArrayType;
+import sample.project.kalah.utils.GameUtil;
 
+/**
+ * The storage structure in the database is determined by the fact that the settings
+ * kalah.bar.numberOfStonesInEachHole and kalah.bar.numberOfHolesForEachParticipant
+ * can change their values, and we need to know precisely
+ * where the kalah was and from which side the user moved.
+ */
 @Entity
 @Table(name = "kalah_games_data")
 @TypeDefs({
@@ -64,14 +71,14 @@ public class GameEntity
 
     @Type(type = "string-array")
     @Column(name = "active_players", columnDefinition = "varchar[]")
-    private String[] activePlayers; //todo change to Player[]
+    private String[] activePlayers;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<PlayerMoveEntity> moves;
 
-    @Column(name = "victorious_player")
+    @Column(name = "winner")
     @Enumerated(EnumType.STRING)
-    private Player victoriousPlayer;
+    private Player winner;
 
     @Override
     public boolean equals(final Object o)
@@ -80,6 +87,37 @@ public class GameEntity
         if (o == null || getClass() != o.getClass()) return false;
         final GameEntity that = (GameEntity) o;
         return Objects.equals(id, that.id);
+    }
+
+
+    public List<Integer> getFirstPlayerStonesList()
+    {
+        return GameUtil.getList(firstPlayerStones);
+    }
+
+    public List<Integer> getSecondPlayerStonesList()
+    {
+        return GameUtil.getList(secondPlayerStones);
+    }
+
+    public void setFirstPlayerStonesList(List<Integer> stones)
+    {
+        this.firstPlayerStones = GameUtil.getArray(stones);
+    }
+
+    public void setSecondPlayerStonesList(List<Integer> stones)
+    {
+        this.secondPlayerStones = GameUtil.getArray(stones);
+    }
+
+    public List<Player> getActivePlayersList()
+    {
+        return GameUtil.getPlayerList(activePlayers);
+    }
+
+    public void setActivePlayersList(List<Player> activePlayers)
+    {
+        this.activePlayers = GameUtil.getPlayerArray(activePlayers);
     }
 
     @Override
@@ -100,7 +138,7 @@ public class GameEntity
                 ", secondPlayerKalah=" + secondPlayerKalah +
                 ", activePlayers=" + Arrays.toString(activePlayers) +
                 ", moves=" + moves +
-                ", victoriousPlayer=" + victoriousPlayer +
+                ", winner=" + winner +
                 '}';
     }
 }

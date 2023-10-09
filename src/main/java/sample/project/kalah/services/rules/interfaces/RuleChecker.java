@@ -1,6 +1,6 @@
 package sample.project.kalah.services.rules.interfaces;
 
-import sample.project.kalah.dto.PlayerMoveRequest;
+import sample.project.kalah.dto.PlayerMoveData;
 import sample.project.kalah.entity.sql.GameEntity;
 
 /**
@@ -16,5 +16,5 @@ public interface RuleChecker
      * @param nextMove The move requested by the player.
      * @return True if the move is allowed, false otherwise.
      */
-    boolean apply(GameEntity game, PlayerMoveRequest nextMove);
+    boolean apply(GameEntity game, PlayerMoveData nextMove);
 }

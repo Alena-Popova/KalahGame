@@ -7,73 +7,79 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import sample.project.kalah.convertors.interfaces.Converter;
-import sample.project.kalah.dto.GameConditionResponse;
+import sample.project.kalah.dto.GameConditionData;
 import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.exceptions.GameActionNotAllowedException;
 import sample.project.kalah.exceptions.GameNotFoundException;
-import sample.project.kalah.generators.interfaces.DefaultEntityGenerator;
+import sample.project.kalah.generators.interfaces.DefaultGenerator;
 import sample.project.kalah.services.entity.interfaces.GameEntityService;
 import sample.project.kalah.services.interfaces.GameActionService;
-import sample.project.kalah.utils.GameUtil;
 
 @Service("gameActionService")
 public class GameActionServiceImpl implements GameActionService
 {
     private static final Logger logger = LoggerFactory.getLogger(GameActionServiceImpl.class);
 
-    private final GameUtil gameUtil;
     private final GameEntityService gameEntityService;
 
-    private final DefaultEntityGenerator<GameEntity> gameDefaultEntityGenerator;
+    private final DefaultGenerator<GameEntity> gameEntityGenerator;
 
-    private final Converter<GameEntity, GameConditionResponse> gameEntityToDTOConverter;
+    private final Converter<GameEntity, GameConditionData> gameEntityToDataConverter;
 
-    public GameActionServiceImpl(final GameUtil gameUtil, final GameEntityService gameEntityService, final DefaultEntityGenerator<GameEntity> gameDefaultEntityGenerator, final Converter<GameEntity, GameConditionResponse> gameEntityToDTOConverter)
+    @Autowired
+    public GameActionServiceImpl(final GameEntityService gameEntityService,
+                                 final DefaultGenerator<GameEntity> gameEntityGenerator,
+                                 final Converter<GameEntity, GameConditionData> gameEntityToDataConverter)
     {
-        this.gameUtil = gameUtil;
         this.gameEntityService = gameEntityService;
-        this.gameDefaultEntityGenerator = gameDefaultEntityGenerator;
-        this.gameEntityToDTOConverter = gameEntityToDTOConverter;
+        this.gameEntityGenerator = gameEntityGenerator;
+        this.gameEntityToDataConverter = gameEntityToDataConverter;
     }
 
     @Autowired
 
 
     @Override
-    public GameConditionResponse createGame()
+    public GameConditionData createGame()
     {
-        GameEntity gameEntity = gameDefaultEntityGenerator.generate();
+        GameEntity gameEntity = gameEntityGenerator.generate();
         gameEntity = gameEntityService.saveAndFlush(gameEntity);
-        return gameEntityToDTOConverter.convert(gameEntity);
+        return gameEntityToDataConverter.convert(gameEntity);
     }
 
     @Override
-    public GameConditionResponse getGame(final UUID gameId) throws GameNotFoundException
+    public GameConditionData getGame(final UUID gameId) throws GameNotFoundException
     {
+        Assert.notNull(gameId, "gameId cannot be null");
+
         GameEntity gameEntity = gameEntityService.getGame(gameId);
-        return gameEntityToDTOConverter.convert(gameEntity);
+        return gameEntityToDataConverter.convert(gameEntity);
     }
 
     @Override
-    public GameConditionResponse joinGame(final UUID gameId, final String playerIdentifier) throws GameNotFoundException, GameActionNotAllowedException
+    public GameConditionData joinGame(final UUID gameId, final String playerIdentifier) throws GameNotFoundException, GameActionNotAllowedException
     {
+        Assert.notNull(gameId, "gameId cannot be null");
+        Assert.notNull(playerIdentifier, "playerIdentifier cannot be null");
+
         GameEntity gameEntity = gameEntityService.getGame(gameId);
 
         checkGameStatusNotFinished(gameEntity);
 
         Player player = Player.valueOf(playerIdentifier);
-        List<Player> activePlayers = gameUtil.convertStringArrayToPlayerList(gameEntity.getActivePlayers());
+        List<Player> activePlayers = gameEntity.getActivePlayersList();
 
         checkAddNewActivePlayer(player, activePlayers, gameId);
 
         activePlayers.add(player);
-        gameEntity.setActivePlayers(gameUtil.convertPlayerListToStringArray(activePlayers));
+        gameEntity.setActivePlayersList(activePlayers);
         gameEntity = gameEntityService.saveAndFlush(gameEntity);
-        return gameEntityToDTOConverter.convert(gameEntity);
+        return gameEntityToDataConverter.convert(gameEntity);
     }
 
     private void checkGameStatusNotFinished(GameEntity gameEntity)
@@ -95,14 +101,16 @@ public class GameActionServiceImpl implements GameActionService
     }
 
     @Override
-    public GameConditionResponse finishGame(final UUID gameId) throws GameNotFoundException
+    public GameConditionData finishGame(final UUID gameId) throws GameNotFoundException
     {
+        Assert.notNull(gameId, "gameId cannot be null");
+
         GameEntity gameEntity = gameEntityService.getGame(gameId);
         if (!GameStatus.FINISHED.equals(gameEntity.getStatus()))
         {
             gameEntity.setStatus(GameStatus.FINISHED);
             gameEntity = gameEntityService.saveAndFlush(gameEntity);
         }
-        return gameEntityToDTOConverter.convert(gameEntity);
+        return gameEntityToDataConverter.convert(gameEntity);
     }
 }

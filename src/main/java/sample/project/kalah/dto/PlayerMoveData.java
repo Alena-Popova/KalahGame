@@ -11,10 +11,9 @@ import sample.project.kalah.entity.Player;
 
 @Data
 @Builder
-@JsonDeserialize(builder = PlayerMoveResponse.PlayerMoveResponseBuilder.class)
-public class PlayerMoveResponse
+@JsonDeserialize(builder = PlayerMoveData.PlayerMoveDataBuilder.class)
+public class PlayerMoveData
 {
-
     @JsonProperty("id")
     private UUID id;
 
@@ -27,14 +26,14 @@ public class PlayerMoveResponse
     @JsonProperty("player")
     private Player player;
 
+    @JsonProperty("starts_on_player_side")
+    private boolean startsOnPlayerSide;
+
     @JsonProperty("starting_pit")
     private Integer startingPit;
 
-    @JsonProperty("starts_in_player_kalah")
-    private boolean startsInPlayerKalah;
-
-    @JsonProperty("is_player_side")
-    private boolean isPlayerSide;
+    @JsonProperty("ends_on_player_side")
+    private boolean endsOnPlayerSide;
 
     @JsonProperty("ending_pit")
     private Integer endingPit;

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import sample.project.kalah.dto.GameConditionResponse;
+import sample.project.kalah.dto.GameConditionData;
 import sample.project.kalah.services.GameConfigurationService;
 import sample.project.kalah.services.interfaces.GameActionService;
 
@@ -27,7 +27,7 @@ public class PlayPageModelBuilder
     {
         try
         {
-            GameConditionResponse gameDTO = gameActionService.getGame(gameId);
+            GameConditionData gameDTO = gameActionService.getGame(gameId);
             model.addAttribute("game_id", gameId);
             model.addAttribute("link", generateJoinLink(gameId));
 
@@ -41,7 +41,7 @@ public class PlayPageModelBuilder
             model.addAttribute("second_player_kalah", gameDTO.getSecondPlayerKalah());
             model.addAttribute("second_player_stones", gameDTO.getSecondPlayerStones());
 
-            model.addAttribute("victorious_player", gameDTO.getVictoriousPlayer());
+            model.addAttribute("winner", gameDTO.getWinner());
         }
         catch (IllegalArgumentException e)
         {

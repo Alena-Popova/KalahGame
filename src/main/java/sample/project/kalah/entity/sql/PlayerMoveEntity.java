@@ -41,14 +41,14 @@ public class PlayerMoveEntity
     @Enumerated(EnumType.STRING)
     private Player player;
 
+    @Column(name = "starts_on_player_side")
+    private boolean startsOnPlayerSide;
+
     @Column(name = "starting_pit")
     private Integer startingPit;
 
-    @Column(name = "starts_in_player_kalah")
-    private boolean startsInPlayerKalah;
-
-    @Column(name = "is_player_side")
-    private boolean isPlayerSide;
+    @Column(name = "ends_on_player_side")
+    private boolean endsOnPlayerSide;
 
     @Column(name = "ending_pit")
     private Integer endingPit;
@@ -79,9 +79,9 @@ public class PlayerMoveEntity
                 ", game=" + (game != null ? game.getId().toString() : null) +
                 ", moveNumber=" + moveNumber +
                 ", player=" + player +
+                ", startsOnPlayerSide=" + startsOnPlayerSide +
                 ", startingPit=" + startingPit +
-                ", startsInPlayerKalah=" + startsInPlayerKalah +
-                ", isPlayerSide=" + isPlayerSide +
+                ", endsOnPlayerSide=" + endsOnPlayerSide +
                 ", endingPit=" + endingPit +
                 ", endsInPlayerKalah=" + endsInPlayerKalah +
                 '}';

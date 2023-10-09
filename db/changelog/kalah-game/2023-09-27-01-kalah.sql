@@ -9,7 +9,7 @@ CREATE TABLE kalah_games_data (
     second_player_stones INTEGER[],
     second_player_kalah INTEGER,
     active_players VARCHAR[],
-    victorious_player VARCHAR
+    winner VARCHAR
 );
 
 CREATE TABLE player_moves (
@@ -17,9 +17,9 @@ CREATE TABLE player_moves (
     game_id UUID,
     move_number INTEGER,
     player VARCHAR,
+    starts_on_player_side BOOLEAN,
     starting_pit INTEGER,
-    starts_in_player_kalah BOOLEAN,
-    is_player_side BOOLEAN,
+    ends_on_player_side BOOLEAN,
     ending_pit INTEGER,
     ends_in_player_kalah BOOLEAN,
     FOREIGN KEY (game_id) REFERENCES kalah_games_data(id)

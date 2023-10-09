@@ -2,7 +2,9 @@ package sample.project.kalah.services.entity.interfaces;
 
 import java.util.UUID;
 
+import sample.project.kalah.dto.GameBarData;
 import sample.project.kalah.entity.sql.GameEntity;
+import sample.project.kalah.entity.sql.PlayerMoveEntity;
 import sample.project.kalah.exceptions.GameNotFoundException;
 
 /**
@@ -27,5 +29,16 @@ public interface GameEntityService
      * @return The saved {@link GameEntity}.
      */
     GameEntity saveAndFlush(GameEntity gameEntity);
+
+    /**
+     * Updates the information of a game entity based on the provided data.
+     *
+     * @param updatedGameBarData   {@link GameBarData} state according to which the {@link GameEntity} should be updated.
+     * @param nextPlayerMoveEntity The {@link PlayerMoveEntity} will be added to the list of moves.
+     * @param gameEntity           The {@link GameEntity} to be updated.
+     * @return The updated game entity after applying the changes.
+     * @throws IllegalArgumentException If player, gameBarData, or entity is null.
+     */
+    GameEntity updateGameEntity(GameBarData updatedGameBarData, PlayerMoveEntity nextPlayerMoveEntity, GameEntity gameEntity);
 }
 

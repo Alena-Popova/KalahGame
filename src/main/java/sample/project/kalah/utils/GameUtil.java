@@ -1,78 +1,55 @@
 package sample.project.kalah.utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
-import sample.project.kalah.services.GameConfigurationService;
 
-@Repository("gameUtil")
 public class GameUtil
 {
-    private final GameConfigurationService gameConfigurationService;
-
-    @Autowired
-    public GameUtil(final GameConfigurationService gameConfigurationService)
-    {
-        this.gameConfigurationService = gameConfigurationService;
-    }
-
-    public String[] convertPlayerListToStringArray(List<Player> playersList)
-    {
-        return playersList.stream()
-                .map(Player::name)
-                .toArray(String[]::new);
-    }
-
-    public List<Player> convertStringArrayToPlayerList(String[] array)
-    {
-        List<String> players = array != null ? Arrays.asList(array) : Collections.emptyList();
-        return players
-                .stream()
-                .map(Player::valueOf)
-                .collect(Collectors.toList());
-    }
-
-    public Optional<PlayerMoveEntity> getLastMove(List<PlayerMoveEntity> moves)
+    public static Optional<PlayerMoveEntity> getLastMove(List<PlayerMoveEntity> moves)
     {
         return moves == null || moves.isEmpty()
                 ? Optional.empty()
                 : moves.stream().max(Comparator.comparing(PlayerMoveEntity::getMoveNumber));
     }
 
-    public List<Integer> convertArrayToListForPlayerStones(Integer[] playerStones)
+    public static List<Integer> getList(Integer[] values)
     {
-        return playerStones != null
-                ? Arrays.asList(playerStones)
-                : getDefaultEmptyBar();
+        return Objects.isNull(values)
+                ? Collections.emptyList()
+                : Arrays.asList(values);
     }
 
-    public Integer[] convertListToArrayForPlayerStones(List<Integer> playerStones)
+    public static Integer[] getArray(List<Integer> values)
     {
-        return playerStones != null
-                ? playerStones.toArray(new Integer[gameConfigurationService.getNumberOfHolesForEachParticipant()])
-                : getDefaultPlayerStonesArray();
+        return Objects.isNull(values)
+                ? new Integer[0]
+                : values.toArray(Integer[]::new);
     }
 
-    public Integer[] getDefaultPlayerStonesArray()
+    public static List<Player> getPlayerList(String[] values)
     {
-        Integer[] playerStones = new Integer[gameConfigurationService.getNumberOfHolesForEachParticipant()];
-        Arrays.fill(playerStones, gameConfigurationService.getNumberOfStonesInEachHole());
-        return playerStones;
+        return Objects.isNull(values)
+                ? Collections.emptyList()
+                : Arrays.stream(values)
+                .map(Player::valueOf)
+                .collect(Collectors.toList());
     }
 
-    private List<Integer> getDefaultEmptyBar()
+    public static String[] getPlayerArray(List<Player> values)
     {
-        return new ArrayList<>(Collections.nCopies(gameConfigurationService.getNumberOfHolesForEachParticipant(), 0));
+        return Objects.isNull(values)
+                ? new String[0]
+                : values.stream()
+                .map(Enum::toString)
+                .toArray(String[]::new);
     }
 
 }

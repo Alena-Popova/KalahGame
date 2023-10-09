@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import sample.project.kalah.dto.GameConditionResponse;
-import sample.project.kalah.dto.PlayerMoveRequest;
+import sample.project.kalah.dto.GameConditionData;
+import sample.project.kalah.dto.PlayerMoveData;
 import sample.project.kalah.services.interfaces.MoveActionService;
 
 @RestController
@@ -28,7 +28,7 @@ public class MoveActionsController
     }
 
     @PostMapping("/{id}/move")
-    public ResponseEntity<GameConditionResponse> makeMove(@PathVariable("id") UUID gameId, @RequestBody PlayerMoveRequest nextMove)
+    public ResponseEntity<GameConditionData> makeMove(@PathVariable("id") UUID gameId, @RequestBody PlayerMoveData nextMove)
     {
         return new ResponseEntity<>(moveActionService.makeMove(gameId, nextMove), HttpStatus.CREATED);
     }
