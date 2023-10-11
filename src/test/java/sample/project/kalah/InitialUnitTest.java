@@ -45,9 +45,14 @@ public class InitialUnitTest
             return new ArrayList<>(Collections.nCopies(getNumberOfHolesForEachParticipant(), 0));
         }
 
-        public static Integer get10Stones()
+        public static Integer getTenStones()
         {
             return 10;
+        }
+
+        public static Integer getZeroStones()
+        {
+            return 0;
         }
 
 
@@ -99,9 +104,9 @@ public class InitialUnitTest
             when(gameEntity.getId()).thenReturn(getDefaultGameUUID());
             when(gameEntity.getStatus()).thenReturn(getInitStatus());
             when(gameEntity.getFirstPlayerStonesList()).thenReturn(getFullStonesBar());
-            when(gameEntity.getFirstPlayerKalah()).thenReturn(get10Stones());
+            when(gameEntity.getFirstPlayerKalah()).thenReturn(getTenStones());
             when(gameEntity.getSecondPlayerStonesList()).thenReturn(getFullStonesBar());
-            when(gameEntity.getSecondPlayerKalah()).thenReturn(get10Stones());
+            when(gameEntity.getSecondPlayerKalah()).thenReturn(getTenStones());
             when(gameEntity.getActivePlayersList()).thenReturn(getActivePlayersList());
             when(gameEntity.getMoves()).thenReturn(moves);
             when(gameEntity.getWinner()).thenReturn(getFirstPlayer());

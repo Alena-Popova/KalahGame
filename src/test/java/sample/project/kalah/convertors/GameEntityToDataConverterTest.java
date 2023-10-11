@@ -55,9 +55,9 @@ class GameEntityToDataConverterTest extends InitialUnitTest
         assertEquals(TestData.getDefaultGameUUID(), result.getId());
         assertEquals(TestData.getInitStatus(), result.getStatus());
         assertEquals(TestData.getFullStonesBar(), result.getFirstPlayerStones());
-        assertEquals(TestData.get10Stones(), result.getFirstPlayerKalah());
+        assertEquals(TestData.getTenStones(), result.getFirstPlayerKalah());
         assertEquals(TestData.getFullStonesBar(), result.getSecondPlayerStones());
-        assertEquals(TestData.get10Stones(), result.getSecondPlayerKalah());
+        assertEquals(TestData.getTenStones(), result.getSecondPlayerKalah());
         assertEquals(TestData.getActivePlayersList(), result.getActivePlayers());
         assertEquals(moves, result.getMoves());
         assertEquals(TestData.getFirstPlayer(), result.getWinner());
