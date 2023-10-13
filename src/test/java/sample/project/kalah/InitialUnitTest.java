@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import sample.project.kalah.dto.GameBarData;
 import sample.project.kalah.dto.PlayerMoveData;
 import sample.project.kalah.entity.GameStatus;
 import sample.project.kalah.entity.Player;
@@ -114,6 +115,15 @@ public class InitialUnitTest
             return gameEntity;
         }
 
+        public static GameBarData getDefaultMockedGameBarData() {
+            GameBarData gameBarData = mock(GameBarData.class);
+
+            when(gameBarData.getPlayerBar()).thenReturn(getFullStonesBar());
+            when(gameBarData.getPlayerKalah()).thenReturn(getTenStones());
+            when(gameBarData.getOppositePlayerBar()).thenReturn(getFullStonesBar());
+
+            return gameBarData;
+        }
         public static PlayerMoveEntity getDefaultMockedPlayerMoveEntity()
         {
             GameEntity gameEntity = mock(GameEntity.class);
