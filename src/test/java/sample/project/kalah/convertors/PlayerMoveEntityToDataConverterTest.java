@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 
 import sample.project.kalah.InitialUnitTest;
 import sample.project.kalah.dto.PlayerMoveData;
+import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ class PlayerMoveEntityToDataConverterTest extends InitialUnitTest
         assertEquals(TestData.getDefaultMoveUUID(), result.getId());
         assertEquals(TestData.getDefaultGameUUID(), result.getGameId());
         assertEquals(TestData.getDefaultMoveNumber(), result.getMoveNumber());
-        assertEquals(TestData.getFirstPlayer(), result.getPlayer());
+        assertEquals(Player.FIRST_PLAYER, result.getPlayer());
         assertEquals(Boolean.TRUE, result.isStartsOnPlayerSide());
         assertEquals(TestData.getDefaultStartingPit(), result.getStartingPit());
         assertEquals(Boolean.TRUE, result.isEndsOnPlayerSide());

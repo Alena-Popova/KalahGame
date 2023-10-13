@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import sample.project.kalah.InitialUnitTest;
 import sample.project.kalah.dto.PlayerMoveData;
+import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 import sample.project.kalah.generators.interfaces.DefaultGenerator;
@@ -51,7 +52,7 @@ class PlayerMoveEntityGeneratorImplTest extends InitialUnitTest
 
         assertEquals(TestData.getDefaultMoveUUID(), result.getId());
         assertEquals(TestData.getDefaultMoveNumber() + 1, result.getMoveNumber());
-        assertEquals(TestData.getFirstPlayer(), result.getPlayer());
+        assertEquals(Player.FIRST_PLAYER, result.getPlayer());
         assertEquals(Boolean.TRUE, result.isStartsOnPlayerSide());
         assertEquals(TestData.getDefaultStartingPit(), result.getStartingPit());
         assertEquals(Boolean.TRUE, result.isEndsOnPlayerSide());

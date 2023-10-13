@@ -17,6 +17,7 @@ import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 import sample.project.kalah.exceptions.MoveNotAllowedException;
+import sample.project.kalah.generators.interfaces.GameBarDataGenerator;
 import sample.project.kalah.generators.interfaces.PlayerMoveEntityGenerator;
 import sample.project.kalah.services.entity.interfaces.GameEntityService;
 import sample.project.kalah.services.interfaces.GameWinnerService;
@@ -27,29 +28,27 @@ import sample.project.kalah.services.rules.interfaces.RuleChecker;
 public class MoveHandlerServiceImpl implements MoveActionService
 {
     private final List<RuleChecker> rulesCheckers;
-
     private final GameWinnerService gameWinnerService;
-
     private final GameEntityService gameEntityService;
-
     private final GameBarDataServiceImpl gameBarDataService;
-
+    private final GameBarDataGenerator gameBarDataGenerator;
     private final PlayerMoveEntityGenerator playerMoveEntityGenerator;
-
     private final Converter<GameEntity, GameConditionData> gameEntityToDataConverter;
 
     @Autowired
     public MoveHandlerServiceImpl(final List<RuleChecker> rulesCheckers,
-                                  final GameBarDataServiceImpl gameBarDataService,
                                   final GameWinnerService gameWinnerService,
                                   final GameEntityService gameEntityService,
+                                  final GameBarDataServiceImpl gameBarDataService,
+                                  final GameBarDataGenerator gameBarDataGenerator,
                                   final PlayerMoveEntityGenerator playerMoveEntityGenerator,
                                   final Converter<GameEntity, GameConditionData> gameEntityToDataConverter)
     {
         this.rulesCheckers = rulesCheckers;
-        this.gameBarDataService = gameBarDataService;
         this.gameWinnerService = gameWinnerService;
         this.gameEntityService = gameEntityService;
+        this.gameBarDataService = gameBarDataService;
+        this.gameBarDataGenerator = gameBarDataGenerator;
         this.playerMoveEntityGenerator = playerMoveEntityGenerator;
         this.gameEntityToDataConverter = gameEntityToDataConverter;
     }
@@ -81,9 +80,10 @@ public class MoveHandlerServiceImpl implements MoveActionService
 
     private GameEntity addNewMove(GameEntity gameEntity, PlayerMoveData nextMoveData)
     {
-        GameBarData oldStateGameBarData = gameBarDataService.getGameBarData(nextMoveData.getPlayer(), gameEntity);
+        GameBarData oldStateGameBarData = gameBarDataGenerator.generate(nextMoveData.getPlayer(), gameEntity);
         GameBarData updatedStateGameBarData = gameBarDataService.updateGameBarData(nextMoveData, oldStateGameBarData);
         PlayerMoveEntity nextPlayerMoveEntity = playerMoveEntityGenerator.generate(nextMoveData);
+
         return gameEntityService.updateGameEntity(updatedStateGameBarData, nextPlayerMoveEntity, gameEntity);
     }
 

@@ -66,11 +66,6 @@ public class InitialUnitTest
             }};
         }
 
-        public static Player getFirstPlayer()
-        {
-            return Player.FIRST_PLAYER;
-        }
-
         public static Integer getNumberOfHolesForEachParticipant()
         {
             return 6;
@@ -110,12 +105,13 @@ public class InitialUnitTest
             when(gameEntity.getSecondPlayerKalah()).thenReturn(getTenStones());
             when(gameEntity.getActivePlayersList()).thenReturn(getActivePlayersList());
             when(gameEntity.getMoves()).thenReturn(moves);
-            when(gameEntity.getWinner()).thenReturn(getFirstPlayer());
+            when(gameEntity.getWinner()).thenReturn(Player.FIRST_PLAYER);
 
             return gameEntity;
         }
 
-        public static GameBarData getDefaultMockedGameBarData() {
+        public static GameBarData getDefaultMockedGameBarData()
+        {
             GameBarData gameBarData = mock(GameBarData.class);
 
             when(gameBarData.getPlayerBar()).thenReturn(getFullStonesBar());
@@ -124,6 +120,7 @@ public class InitialUnitTest
 
             return gameBarData;
         }
+
         public static PlayerMoveEntity getDefaultMockedPlayerMoveEntity()
         {
             GameEntity gameEntity = mock(GameEntity.class);
@@ -134,7 +131,7 @@ public class InitialUnitTest
             when(playerMoveEntity.getId()).thenReturn(getDefaultMoveUUID());
             when(playerMoveEntity.getGame()).thenReturn(gameEntity);
             when(playerMoveEntity.getMoveNumber()).thenReturn(getDefaultMoveNumber());
-            when(playerMoveEntity.getPlayer()).thenReturn(getFirstPlayer());
+            when(playerMoveEntity.getPlayer()).thenReturn(Player.FIRST_PLAYER);
             when(playerMoveEntity.isStartsOnPlayerSide()).thenReturn(Boolean.TRUE);
             when(playerMoveEntity.getStartingPit()).thenReturn(getDefaultStartingPit());
             when(playerMoveEntity.isEndsOnPlayerSide()).thenReturn(Boolean.TRUE);
@@ -151,7 +148,7 @@ public class InitialUnitTest
             when(playerMoveData.getId()).thenReturn(getDefaultMoveUUID());
             when(playerMoveData.getGameId()).thenReturn(getDefaultGameUUID());
             when(playerMoveData.getMoveNumber()).thenReturn(getDefaultMoveNumber());
-            when(playerMoveData.getPlayer()).thenReturn(getFirstPlayer());
+            when(playerMoveData.getPlayer()).thenReturn(Player.FIRST_PLAYER);
             when(playerMoveData.isStartsOnPlayerSide()).thenReturn(Boolean.TRUE);
             when(playerMoveData.getStartingPit()).thenReturn(getDefaultStartingPit());
             when(playerMoveData.isEndsOnPlayerSide()).thenReturn(Boolean.TRUE);

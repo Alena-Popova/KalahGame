@@ -6,34 +6,11 @@ import org.springframework.stereotype.Service;
 
 import sample.project.kalah.dto.GameBarData;
 import sample.project.kalah.dto.PlayerMoveData;
-import sample.project.kalah.entity.Player;
-import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.services.interfaces.GameBarDataService;
 
 @Service("gameBarDataService")
 public class GameBarDataServiceImpl implements GameBarDataService
 {
-    @Override
-    public GameBarData getGameBarData(final Player player, final GameEntity game)
-    {
-        if (Player.FIRST_PLAYER.equals(player))
-        {
-            return GameBarData.builder()
-                    .playerBar(game.getFirstPlayerStonesList())
-                    .playerKalah(game.getFirstPlayerKalah())
-                    .oppositePlayerBar(game.getSecondPlayerStonesList())
-                    .build();
-        }
-        else
-        {
-            return GameBarData.builder()
-                    .playerBar(game.getSecondPlayerStonesList())
-                    .playerKalah(game.getSecondPlayerKalah())
-                    .oppositePlayerBar(game.getFirstPlayerStonesList())
-                    .build();
-        }
-    }
-
     @Override
     public GameBarData updateGameBarData(final PlayerMoveData nextMove, final GameBarData oldStateGameBarData)
     {

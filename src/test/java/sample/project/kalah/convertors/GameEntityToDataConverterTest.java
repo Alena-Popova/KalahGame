@@ -12,6 +12,7 @@ import sample.project.kalah.InitialUnitTest;
 import sample.project.kalah.convertors.interfaces.Converter;
 import sample.project.kalah.dto.GameConditionData;
 import sample.project.kalah.dto.PlayerMoveData;
+import sample.project.kalah.entity.Player;
 import sample.project.kalah.entity.sql.GameEntity;
 import sample.project.kalah.entity.sql.PlayerMoveEntity;
 
@@ -60,7 +61,7 @@ class GameEntityToDataConverterTest extends InitialUnitTest
         assertEquals(TestData.getTenStones(), result.getSecondPlayerKalah());
         assertEquals(TestData.getActivePlayersList(), result.getActivePlayers());
         assertEquals(moves, result.getMoves());
-        assertEquals(TestData.getFirstPlayer(), result.getWinner());
+        assertEquals(Player.FIRST_PLAYER, result.getWinner());
     }
 
 }
